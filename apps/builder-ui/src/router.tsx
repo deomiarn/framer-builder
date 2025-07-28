@@ -1,17 +1,24 @@
 import { createBrowserRouter } from "react-router-dom";
 import RootLayout from "@/layouts/RootLayout.tsx";
-import HomePage from "@/features/home/HomePage.tsx";
+import LoginPage from "@/features/auth/pages/LoginPage.tsx";
+import { ProtectedRoute } from "@/shared/routes/ProtectedRoute.tsx";
+import DashboardPage from "@/features/home/DashboardPage.tsx";
 import ElementsPage from "@/features/elements/ElementsPage.tsx";
 import ColoringPage from "@/features/coloring/ColoringPage.tsx";
 
 export const router = createBrowserRouter([
+  { path: "/login", element: <LoginPage /> },
   {
-    path: "/",
-    element: <RootLayout />,
+    element: <ProtectedRoute />,
     children: [
-      { index: true, element: <HomePage /> },
-      { path: "elements", element: <ElementsPage /> },
-      { path: "coloring", element: <ColoringPage /> },
+      {
+        element: <RootLayout />,
+        children: [
+          { path: "/", element: <DashboardPage /> },
+          { path: "elements", element: <ElementsPage /> },
+          { path: "coloring", element: <ColoringPage /> },
+        ],
+      },
     ],
   },
 ]);
