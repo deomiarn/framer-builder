@@ -1,8 +1,9 @@
 import { cn } from "@/shared/lib/utils";
+import React from "react";
 
 interface SuccessCardProps {
   title: string;
-  subtitle?: string;
+  subtitle?: React.ReactNode;
   className?: string;
 }
 

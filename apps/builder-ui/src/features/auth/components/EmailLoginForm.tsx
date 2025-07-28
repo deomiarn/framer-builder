@@ -11,6 +11,7 @@ import { ChevronLeftIcon } from "lucide-react";
 export function EmailLoginForm() {
   const { signIn } = useAuthCtx();
   const [sent, setSent] = useState(false);
+  const [lastEmail, setLastEmail] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
   const {
     register,
@@ -25,6 +26,7 @@ export function EmailLoginForm() {
   async function onSubmit({ email }: LoginInput) {
     try {
       await signIn(email);
+      setLastEmail(email);
       setSent(true);
     } catch (e: any) {
       setErrorMsg(e.message ?? "Unknown error");
@@ -36,7 +38,13 @@ export function EmailLoginForm() {
       <div>
         <SuccessCard
           title="Check your inbox!"
-          subtitle="We’ve sent you a sign-in link."
+          subtitle={
+            <>
+              We sent a sign-in link to <b>{lastEmail}</b>.
+              <br />
+              Click it on this device to continue.
+            </>
+          }
         />
         <Button
           variant="ghost"
