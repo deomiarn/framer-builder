@@ -28,7 +28,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       email,
       options: { emailRedirectTo: location.origin },
     });
-    alert("Magic link sent! Check your inbox.");
   }
 
   const signOut = () => supabase.auth.signOut();

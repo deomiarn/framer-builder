@@ -1,36 +1,25 @@
-import { type FormEvent, useState } from "react";
-import { Button } from "@/shared/ui/button";
-import { useAuthCtx } from "../AuthContext";
-import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card.tsx";
-import { Input } from "@/shared/ui/input.tsx";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/shared/ui/card";
+import { EmailLoginForm } from "@/features/auth/components/EmailLoginForm.tsx";
 
 export default function LoginPage() {
-  const { signIn } = useAuthCtx();
-  const [email, setEmail] = useState("");
-
-  async function submit(e: FormEvent) {
-    e.preventDefault();
-    if (email) await signIn(email);
-  }
-
   return (
-    <div className="grid min-h-screen place-items-center">
+    <div className="grid min-h-screen place-items-center bg-background">
       <Card className="w-96">
-        <CardHeader>
-          <CardTitle className="text-center">Sign in</CardTitle>
+        <CardHeader className="space-y-2 text-center">
+          <CardTitle>Log in / Sign up</CardTitle>
+          <CardDescription>
+            Enter your email. We’ll send you a one-click Magic Link to access
+            your account.
+          </CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={submit} className="space-y-4">
-            <Input
-              placeholder="you@example.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-            <Button className="w-full" type="submit">
-              Send Magic Link
-            </Button>
-          </form>
+          <EmailLoginForm />
         </CardContent>
       </Card>
     </div>
