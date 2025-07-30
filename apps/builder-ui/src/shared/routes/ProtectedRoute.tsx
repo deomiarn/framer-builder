@@ -1,6 +1,6 @@
 import { Navigate, Outlet } from "react-router-dom";
 import { useAuthCtx } from "@/features/auth/AuthContext.ts";
-import Spinner from "@/shared/ui/spinner.tsx";
+import Spinner from "@/shared/components/ui/spinner.tsx";
 
 export const ProtectedRoute = () => {
   const { session, loading } = useAuthCtx();

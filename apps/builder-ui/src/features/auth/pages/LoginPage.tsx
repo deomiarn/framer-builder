@@ -4,7 +4,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/shared/ui/card";
+} from "@/shared/components/ui/card.tsx";
 import { EmailLoginForm } from "@/features/auth/components/EmailLoginForm.tsx";
 
 export default function LoginPage() {
