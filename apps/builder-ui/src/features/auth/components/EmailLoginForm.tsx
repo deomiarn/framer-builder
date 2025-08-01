@@ -7,6 +7,7 @@ import { Button } from "@/shared/components/ui/button.tsx";
 import { useAuthCtx } from "@/features/auth/AuthContext.ts";
 import { SuccessCard } from "@/features/auth/components/SuccessCard.tsx";
 import { ChevronLeftIcon } from "lucide-react";
+import Spinner from "@/shared/components/ui/spinner.tsx";
 
 export function EmailLoginForm() {
   const { signIn } = useAuthCtx();
@@ -16,7 +17,7 @@ export function EmailLoginForm() {
   const {
     register,
     handleSubmit,
-    formState: { errors, isValid, touchedFields, isSubmitted },
+    formState: { errors, isValid, touchedFields, isSubmitting, isSubmitted },
   } = useForm<LoginInput>({
     resolver: zodResolver(LoginSchema),
     mode: "onSubmit",
@@ -69,8 +70,19 @@ export function EmailLoginForm() {
         <p className="text-destructive text-sm">{errors.email.message}</p>
       )}
       {errorMsg && <p className="text-destructive text-sm">{errorMsg}</p>}
-      <Button className="w-full" disabled={!isValid}>
-        Send link
+      <Button
+        className="w-full"
+        disabled={!isValid || isSubmitting}
+        type="submit"
+      >
+        {isSubmitting ? (
+          <>
+            <Spinner />
+            "Sending..."
+          </>
+        ) : (
+          "Send Magic Link"
+        )}
       </Button>
       <p className="text-xs text-muted-foreground text-center">
         We’ll automatically create an account if you’re new.
