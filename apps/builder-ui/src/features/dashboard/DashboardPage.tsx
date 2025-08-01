@@ -1,9 +1,31 @@
-function DashboardPage() {
+import { useCreateProject } from "../projects/hooks/useCreateProject";
+import { useDeleteProject } from "../projects/hooks/useDeleteProject";
+import { useProjects } from "../projects/hooks/useProjects";
+import { ProjectsSkeleton } from "@/features/dashboard/components/ProjectsSkeleton.tsx";
+import { EmptyCard } from "@/features/dashboard/components/EmptyCard.tsx";
+import { ProjectCard } from "@/features/dashboard/components/ProjectCard.tsx";
+
+export default function DashboardPage() {
+  const { data = [], isLoading } = useProjects();
+  const createProject = useCreateProject();
+  const deleteProject = useDeleteProject();
+
+  if (isLoading) return <ProjectsSkeleton />;
+
   return (
-    <div className="grid gap-6">
-      <h1 className="text-2xl font-semibold">Dashboard</h1>
+    <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+      {data.length === 0 ? (
+        <EmptyCard onCreate={() => createProject.mutate("Untitled project")} />
+      ) : (
+        data.map((p) => (
+          <ProjectCard
+            key={p.id}
+            project={p}
+            onOpen={(id) => console.log("open", id)}
+            onDelete={(id) => deleteProject.mutate(id)}
+          />
+        ))
+      )}
     </div>
   );
 }
-
-export default DashboardPage;
