@@ -3,15 +3,15 @@ import {
   CardContent,
   CardFooter,
   CardHeader,
-} from "@/shared/components/ui/card";
-import { Button } from "@/shared/components/ui/button";
+} from "@/shared/components/ui/card.tsx";
+import { Button } from "@/shared/components/ui/button.tsx";
 import { MoreVertical } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/shared/components/ui/dropdown-menu";
+} from "@/shared/components/ui/dropdown-menu.tsx";
 import type { Project } from "@/features/projects/types/project.ts";
 import { formatDistanceToNow } from "date-fns";
 

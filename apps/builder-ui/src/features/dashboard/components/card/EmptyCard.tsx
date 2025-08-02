@@ -3,8 +3,8 @@ import {
   CardContent,
   CardFooter,
   CardHeader,
-} from "@/shared/components/ui/card";
-import { Button } from "@/shared/components/ui/button";
+} from "@/shared/components/ui/card.tsx";
+import { Button } from "@/shared/components/ui/button.tsx";
 import { CirclePlus } from "lucide-react";
 
 export function EmptyCard({ onCreate }: { onCreate: () => void }) {

@@ -7,7 +7,7 @@ import { Button } from "@/shared/components/ui/button.tsx";
 import { useAuthCtx } from "@/features/auth/AuthContext.ts";
 import { SuccessCard } from "@/features/auth/components/SuccessCard.tsx";
 import { ChevronLeftIcon } from "lucide-react";
-import Spinner from "@/shared/components/ui/spinner.tsx";
+import LoadingButton from "@/shared/components/ui/loadingButton.tsx";
 
 export function EmailLoginForm() {
   const { signIn } = useAuthCtx();
@@ -70,20 +70,15 @@ export function EmailLoginForm() {
         <p className="text-destructive text-sm">{errors.email.message}</p>
       )}
       {errorMsg && <p className="text-destructive text-sm">{errorMsg}</p>}
-      <Button
+      <LoadingButton
         className="w-full"
-        disabled={!isValid || isSubmitting}
         type="submit"
+        isLoading={isSubmitting}
+        disabled={!isValid}
+        loadingText="Sending..."
       >
-        {isSubmitting ? (
-          <>
-            <Spinner />
-            "Sending..."
-          </>
-        ) : (
-          "Send Magic Link"
-        )}
-      </Button>
+        Send Magic Link
+      </LoadingButton>
       <p className="text-xs text-muted-foreground text-center">
         We’ll automatically create an account if you’re new.
       </p>
