@@ -1,0 +1,74 @@
+[
+	{
+		"id": "navbar",
+		"label": "Navbar"
+	},
+	{
+		"id": "hero",
+		"label": "Hero Section"
+	},
+	{
+		"id": "feature-grid",
+		"label": "Feature Grid"
+	},
+	{
+		"id": "feature-list",
+		"label": "Feature List"
+	},
+	{
+		"id": "metrics",
+		"label": "Metrics / Stats"
+	},
+	{
+		"id": "team",
+		"label": "Team"
+	},
+	{
+		"id": "company-logos",
+		"label": "Company Logos"
+	},
+	{
+		"id": "testimonials",
+		"label": "Testimonials"
+	},
+	{
+		"id": "pricing",
+		"label": "Pricing Table"
+	},
+	{
+		"id": "cta-banner",
+		"label": "Call-to-Action Banner"
+	},
+	{
+		"id": "blog-preview",
+		"label": "Blog Preview"
+	},
+	{
+		"id": "contact",
+		"label": "Contact Form / Info"
+	},
+	{
+		"id": "faq",
+		"label": "FAQ Accordion"
+	},
+	{
+		"id": "gallery",
+		"label": "Image Gallery"
+	},
+	{
+		"id": "opening-times",
+		"label": "Opening Times"
+	},
+	{
+		"id": "legal-info",
+		"label": "Legal Informations"
+	},
+	{
+		"id": "newsletter",
+		"label": "Newsletter Signup"
+	},
+	{
+		"id": "footer",
+		"label": "Footer"
+	}
+]
