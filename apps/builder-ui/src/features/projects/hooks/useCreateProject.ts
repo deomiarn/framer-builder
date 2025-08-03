@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/shared/lib/supabase.ts";
-import type { Project } from "@/features/projects/types/project.ts";
+import type { Project } from "@/shared/types/project.ts";
 import { projectsKey } from "@/features/projects/hooks/keys.ts";
 
 export function useCreateProject() {

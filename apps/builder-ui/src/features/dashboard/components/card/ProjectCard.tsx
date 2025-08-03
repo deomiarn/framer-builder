@@ -12,11 +12,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/shared/components/ui/dropdown-menu.tsx";
-import type { Project } from "@/features/projects/types/project.ts";
+import type { Project } from "@/shared/types/project.ts";
 import { formatDistanceToNow } from "date-fns";
 import { useState } from "react";
 import RenameProjectDialog from "@/features/dashboard/components/dialog/RenameProjectDialog.tsx";
 import { DeleteProjectAlertDialog } from "@/features/dashboard/components/dialog/DeleteProjectAlertDialog.tsx";
+import { useNavigate } from "react-router-dom";
 
 interface Props {
   project: Project;
@@ -25,6 +26,7 @@ interface Props {
 export function ProjectCard({ project }: Props) {
   const [renameOpen, setRenameOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
+  const navigate = useNavigate();
 
   return (
     <>
@@ -59,7 +61,7 @@ export function ProjectCard({ project }: Props) {
         <CardFooter className="mt-auto">
           <Button
             className="w-full"
-            // onClick={() => void}
+            onClick={() => navigate(`/projects/${project.id}`)}
           >
             Open
           </Button>
