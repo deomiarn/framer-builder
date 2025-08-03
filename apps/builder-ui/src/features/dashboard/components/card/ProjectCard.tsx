@@ -14,17 +14,17 @@ import {
 } from "@/shared/components/ui/dropdown-menu.tsx";
 import type { Project } from "@/features/projects/types/project.ts";
 import { formatDistanceToNow } from "date-fns";
-import { useDeleteProject } from "@/features/projects/hooks/useDeleteProject.ts";
 import { useState } from "react";
 import RenameProjectDialog from "@/features/dashboard/components/dialog/RenameProjectDialog.tsx";
+import { DeleteProjectAlertDialog } from "@/features/dashboard/components/dialog/DeleteProjectAlertDialog.tsx";
 
 interface Props {
   project: Project;
 }
 
 export function ProjectCard({ project }: Props) {
-  const deleteProject = useDeleteProject();
-  const [open, setOpen] = useState(false);
+  const [renameOpen, setRenameOpen] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
 
   return (
     <>
@@ -39,12 +39,10 @@ export function ProjectCard({ project }: Props) {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => setOpen(true)}>
+              <DropdownMenuItem onClick={() => setRenameOpen(true)}>
                 Rename
               </DropdownMenuItem>
-              <DropdownMenuItem
-                onClick={() => deleteProject.mutate(project.id)}
-              >
+              <DropdownMenuItem onClick={() => setDeleteOpen(true)}>
                 Delete
               </DropdownMenuItem>
             </DropdownMenuContent>
@@ -67,9 +65,16 @@ export function ProjectCard({ project }: Props) {
           </Button>
         </CardFooter>
       </Card>
+
       <RenameProjectDialog
-        open={open}
-        onOpenChange={setOpen}
+        open={renameOpen}
+        onOpenChange={setRenameOpen}
+        projectId={project.id}
+        projectName={project.name}
+      />
+      <DeleteProjectAlertDialog
+        open={deleteOpen}
+        onOpenChange={setDeleteOpen}
         projectId={project.id}
         projectName={project.name}
       />

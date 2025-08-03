@@ -13,6 +13,7 @@ import { Button } from "@/shared/components/ui/button.tsx";
 import LoadingButton from "@/shared/components/ui/loadingButton.tsx";
 import { toast } from "sonner";
 import { useRenameProject } from "@/features/projects/hooks/useRenameProject.ts";
+import { PROJECT_NAME_MAX_LENGTH } from "@/shared/constants/project.ts";
 
 interface NewProjectDialogProps {
   open: boolean;
@@ -28,7 +29,8 @@ export default function RenameProjectDialog({
   projectName,
 }: NewProjectDialogProps) {
   const [name, setName] = useState(projectName);
-  const { mutateAsync: renameProject, isPending } = useRenameProject();
+  const renameProject = useRenameProject();
+  const remaining = PROJECT_NAME_MAX_LENGTH - name.length;
 
   useEffect(() => setName(projectName), [open, projectName]);
 
@@ -37,16 +39,23 @@ export default function RenameProjectDialog({
     const newName = name.trim();
     if (!newName) return;
 
-    try {
-      const project = await renameProject({ projectId, newName });
-      onOpenChange(false);
-      toast.success(`Project "${project.name}" renamed successfully!`);
-    } catch (err) {
-      console.error(err);
-      toast.error(
-        `Failed to rename project: ${err instanceof Error ? err.message : "Unknown error"}`,
-      );
-    }
+    renameProject.mutate(
+      { projectId, newName },
+      {
+        onSuccess: (project) => {
+          onOpenChange(false);
+          toast.success(`Project "${project.name}" renamed successfully!`);
+        },
+        onError: (error) => {
+          console.error("Failed to rename project:", error);
+          toast.error(
+            `Failed to rename project: ${
+              error instanceof Error ? error.message : "Unknown error"
+            }`,
+          );
+        },
+      },
+    );
   }
 
   return (
@@ -62,12 +71,15 @@ export default function RenameProjectDialog({
         <form onSubmit={handleSubmit} className="space-y-4">
           <Input
             autoFocus
+            maxLength={PROJECT_NAME_MAX_LENGTH}
             value={name}
             onChange={(e) => setName(e.target.value)}
-            placeholder="Project name"
+            placeholder={`Project name (max ${PROJECT_NAME_MAX_LENGTH} chars)`}
             aria-invalid={!name.trim()}
           />
-
+          <p className="text-xs text-muted-foreground">
+            {remaining} Characters remaining
+          </p>
           <DialogFooter className="flex">
             <DialogClose asChild>
               <Button variant="outline" type="button">
@@ -77,9 +89,9 @@ export default function RenameProjectDialog({
 
             <LoadingButton
               type="submit"
-              isLoading={isPending}
+              isLoading={renameProject.isPending}
               disabled={!name.trim()}
-              loadingText="Rename project..."
+              loadingText="Renaming..."
             >
               Rename
             </LoadingButton>

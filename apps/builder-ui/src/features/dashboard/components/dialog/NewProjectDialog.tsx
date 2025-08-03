@@ -14,6 +14,7 @@ import { Input } from "@/shared/components/ui/input.tsx";
 import { Button } from "@/shared/components/ui/button.tsx";
 import LoadingButton from "@/shared/components/ui/loadingButton.tsx";
 import { toast } from "sonner";
+import { PROJECT_NAME_MAX_LENGTH } from "@/shared/constants/project.ts";
 
 interface NewProjectDialogProps {
   open: boolean;
@@ -24,12 +25,13 @@ export default function NewProjectDialog({
   open,
   onOpenChange,
 }: NewProjectDialogProps) {
-  const [name, setName] = useState("Untitled project");
+  const [name, setName] = useState("");
   const navigate = useNavigate();
-  const { mutateAsync: createProject, isPending } = useCreateProject();
+  const createProject = useCreateProject();
+  const remaining = PROJECT_NAME_MAX_LENGTH - name.length;
 
   useEffect(() => {
-    if (open) setName("Untitled project");
+    if (open) setName("");
   }, [open]);
 
   async function handleSubmit(e: FormEvent) {
@@ -37,17 +39,21 @@ export default function NewProjectDialog({
     const trimmed = name.trim();
     if (!trimmed) return;
 
-    try {
-      const project = await createProject(trimmed);
-      onOpenChange(false);
-      toast.success(`Project "${project.name}" created successfully!`);
-      navigate(`/projects/${project.id}`);
-    } catch (err) {
-      console.error(err);
-      toast.error(
-        `Failed to create project: ${err instanceof Error ? err.message : "Unknown error"}`,
-      );
-    }
+    createProject.mutate(trimmed, {
+      onSuccess: (project) => {
+        onOpenChange(false);
+        navigate(`/projects/${project.id}`);
+        toast.success(`Project "${trimmed}" created successfully!`);
+      },
+      onError: (error) => {
+        console.error("Failed to create project:", error);
+        toast.error(
+          `Failed to create project: ${
+            error instanceof Error ? error.message : "Unknown error"
+          }`,
+        );
+      },
+    });
   }
 
   return (
@@ -63,12 +69,15 @@ export default function NewProjectDialog({
         <form onSubmit={handleSubmit} className="space-y-4">
           <Input
             autoFocus
+            maxLength={PROJECT_NAME_MAX_LENGTH}
             value={name}
             onChange={(e) => setName(e.target.value)}
-            placeholder="Project name"
+            placeholder={`Project name (max ${PROJECT_NAME_MAX_LENGTH} chars)`}
             aria-invalid={!name.trim()}
           />
-
+          <p className="text-xs text-muted-foreground">
+            {remaining} Characters remaining
+          </p>
           <DialogFooter className="flex">
             <DialogClose asChild>
               <Button variant="outline" type="button">
@@ -78,7 +87,7 @@ export default function NewProjectDialog({
 
             <LoadingButton
               type="submit"
-              isLoading={isPending}
+              isLoading={createProject.isPending}
               disabled={!name.trim()}
               loadingText="Creating..."
             >

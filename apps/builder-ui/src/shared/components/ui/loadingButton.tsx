@@ -11,7 +11,7 @@ const LoadingButton = forwardRef<HTMLButtonElement, LoadingButtonProps>(
   (
     {
       isLoading = false,
-      loadingText = "Loading…",
+      loadingText = "Loading...",
       children,
       disabled,
       ...rest
