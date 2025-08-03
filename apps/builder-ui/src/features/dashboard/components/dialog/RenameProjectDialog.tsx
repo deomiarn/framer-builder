@@ -8,44 +8,43 @@ import {
   DialogTitle,
 } from "@/shared/components/ui/dialog.tsx";
 import { type FormEvent, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useCreateProject } from "@/features/projects/hooks/useCreateProject.ts";
 import { Input } from "@/shared/components/ui/input.tsx";
 import { Button } from "@/shared/components/ui/button.tsx";
 import LoadingButton from "@/shared/components/ui/loadingButton.tsx";
 import { toast } from "sonner";
+import { useRenameProject } from "@/features/projects/hooks/useRenameProject.ts";
 
 interface NewProjectDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  projectId: string;
+  projectName: string;
 }
 
-export default function NewProjectDialog({
+export default function RenameProjectDialog({
   open,
   onOpenChange,
+  projectId,
+  projectName,
 }: NewProjectDialogProps) {
-  const [name, setName] = useState("Untitled project");
-  const navigate = useNavigate();
-  const { mutateAsync: createProject, isPending } = useCreateProject();
+  const [name, setName] = useState(projectName);
+  const { mutateAsync: renameProject, isPending } = useRenameProject();
 
-  useEffect(() => {
-    if (open) setName("Untitled project");
-  }, [open]);
+  useEffect(() => setName(projectName), [open, projectName]);
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
-    const trimmed = name.trim();
-    if (!trimmed) return;
+    const newName = name.trim();
+    if (!newName) return;
 
     try {
-      const project = await createProject(trimmed);
+      const project = await renameProject({ projectId, newName });
       onOpenChange(false);
-      toast.success(`Project "${project.name}" created successfully!`);
-      navigate(`/projects/${project.id}`);
+      toast.success(`Project "${project.name}" renamed successfully!`);
     } catch (err) {
       console.error(err);
       toast.error(
-        `Failed to create project: ${err instanceof Error ? err.message : "Unknown error"}`,
+        `Failed to rename project: ${err instanceof Error ? err.message : "Unknown error"}`,
       );
     }
   }
@@ -54,9 +53,9 @@ export default function NewProjectDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-sm">
         <DialogHeader>
-          <DialogTitle>New Project</DialogTitle>
+          <DialogTitle>Rename Project</DialogTitle>
           <DialogDescription>
-            Create a new project to start building your application.
+            Enter a new name for your project.
           </DialogDescription>
         </DialogHeader>
 
@@ -80,9 +79,9 @@ export default function NewProjectDialog({
               type="submit"
               isLoading={isPending}
               disabled={!name.trim()}
-              loadingText="Creating..."
+              loadingText="Rename project..."
             >
-              Create & Open
+              Rename
             </LoadingButton>
           </DialogFooter>
         </form>

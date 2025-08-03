@@ -5,6 +5,7 @@ import {
   SidebarProvider,
 } from "@/shared/components/ui/sidebar.tsx";
 import { AppHeader } from "@/shared/components/AppHeader.tsx";
+import { Toaster } from "sonner";
 
 export const AppLayout = () => {
   return (
@@ -15,6 +16,7 @@ export const AppLayout = () => {
         <main className="p-4">
           <Outlet />
         </main>
+        <Toaster />
       </SidebarInset>
     </SidebarProvider>
   );

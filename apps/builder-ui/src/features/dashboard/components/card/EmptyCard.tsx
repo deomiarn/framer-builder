@@ -6,8 +6,11 @@ import {
 } from "@/shared/components/ui/card.tsx";
 import { Button } from "@/shared/components/ui/button.tsx";
 import { CirclePlus } from "lucide-react";
+import { useCreateProject } from "@/features/projects/hooks/useCreateProject.ts";
 
-export function EmptyCard({ onCreate }: { onCreate: () => void }) {
+export function EmptyCard() {
+  const createProject = useCreateProject();
+
   return (
     <Card className="flex h-48 w-full flex-col items-center justify-center gap-3">
       <CardHeader className="flex flex-col w-full text-center items-center">
@@ -18,7 +21,9 @@ export function EmptyCard({ onCreate }: { onCreate: () => void }) {
         Start your first project by clicking below.
       </CardContent>
       <CardFooter className="mt-auto">
-        <Button onClick={onCreate}>Create project</Button>
+        <Button onClick={() => createProject.mutate("Untitled project")}>
+          Create project
+        </Button>
       </CardFooter>
     </Card>
   );
